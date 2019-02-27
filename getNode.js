@@ -44,17 +44,19 @@ function getNode(key, enemyLevel) {
     key = keyArr.join("/")
 
     let combination = getCombination(levelArr, enemyLv)
+    // console.log(combination[3])
     // console.log(combination)
     if (!combination[3]) {
         this.check = combination[1];
-        this.rightShipHit = combination[2]
+        this.rightShipHit = combination[2];
         this.searched = true
         this.parent = {}
         this.children = []
     }
     else {
         this.key = key;
-        this.check = combination[2]; //costcheck and combatcheck
+        this.check = combination[3]; //costcheck and combatcheck
+        this.rightShipHit = combination[2];
         this.enemyLv = enemyLv
         this.searched = false
         this.parent = []

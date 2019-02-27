@@ -99,7 +99,7 @@ while (queue.length > 0) {
 
 var end = result[result.highest]
 while (end.parent) {
-    console.log(end);
+    // console.log(end.key);
     end = end.parent
 }
 
@@ -109,50 +109,55 @@ function getChildren(Node, result) {
     // console.log(Node.parent)
     var key = Node.key;
     var enemyLv = Node.enemyLv;
+    var rightShipHit = Node.rightShipHit;
+    rightShipHit = rightShipHit.join("")
+    // console.log(rightShipHit)
     // console.log(key)
 
     if (Node.check.costChecked == false) {
         // Node is closed
     } else
         if (Node.check.combatCheck == false) {
-            //6. rightwing
-            let levelArrRightWingKey = upgradeOnce(key, 5)
-            if (keys.indexOf(levelArrRightWingKey) == -1) {
-                Node.children.push(new getNode(levelArrRightWingKey, enemyLv))
-            }
-            //4. rightweapon
-            let levelArrRightWeaponKey = upgradeOnce(key, 3)
-            if (keys.indexOf(levelArrRightWeaponKey) == -1) {
-                Node.children.push(new getNode(levelArrRightWeaponKey, enemyLv))
-            }
-            //3. leftHull
-            let levelArrLeftHullKey = upgradeOnce(key, 2)
-            if (keys.indexOf(levelArrLeftHullKey) == -1) {
-                Node.children.push(new getNode(levelArrLeftHullKey, enemyLv))
-            }
+            //todo : if rightShipHit is not 0,1,2 -> focus on left,mid hull and right hull,wing
+            // or focus on mid weapon and right weapon
+            if (rightShipHit == "012") {
+                //4. rightweapon
+                let levelArrRightWeaponKey = upgradeOnce(key, 3)
+                if (keys.indexOf(levelArrRightWeaponKey) == -1) {
+                    Node.children.push(new getNode(levelArrRightWeaponKey, enemyLv))
+                }
+                // 2. midweapon
+                let levelArrMidWeaponKey = upgradeOnce(key, 0)
+                let weaponLevel = levelArrMidWeaponKey.split(/\//g)[0]
+                if (parseInt(weaponLevel) <= 35) {
+                    if (keys.indexOf(levelArrMidWeaponKey) == -1) {
+                        Node.children.push(new getNode(levelArrMidWeaponKey, enemyLv))
+                    }
+                }
+            } else {
+                //6. rightwing
+                let levelArrRightWingKey = upgradeOnce(key, 5)
+                if (keys.indexOf(levelArrRightWingKey) == -1) {
+                    Node.children.push(new getNode(levelArrRightWingKey, enemyLv))
 
-            // 1. midHull 
-            let levelArrMidHullKey = upgradeOnce(key, 1)
-            if (keys.indexOf(levelArrMidHullKey) == -1) {
-                Node.children.push(new getNode(levelArrMidHullKey, enemyLv))
-            }
-            //5. rightHull
-            let levelArrRightHullKey = upgradeOnce(key, 4)
-            if (keys.indexOf(levelArrRightHullKey) == -1) {
-                Node.children.push(new getNode(levelArrRightHullKey, enemyLv))
-            }
-            // 2. midweapon
-            let levelArrMidWeaponKey = upgradeOnce(key, 0)
-            let weaponLevel = levelArrMidWeaponKey.split(/\//g)[0]
-            if (parseInt(weaponLevel) <= 35) {
-                if (keys.indexOf(levelArrMidWeaponKey) == -1) {
-                    Node.children.push(new getNode(levelArrMidWeaponKey, enemyLv))
+                }
+                //3. leftHull
+                let levelArrLeftHullKey = upgradeOnce(key, 2)
+                if (keys.indexOf(levelArrLeftHullKey) == -1) {
+                    Node.children.push(new getNode(levelArrLeftHullKey, enemyLv))
+                }
+
+                // 1. midHull 
+                let levelArrMidHullKey = upgradeOnce(key, 1)
+                if (keys.indexOf(levelArrMidHullKey) == -1) {
+                    Node.children.push(new getNode(levelArrMidHullKey, enemyLv))
+                }
+                //5. rightHull
+                let levelArrRightHullKey = upgradeOnce(key, 4)
+                if (keys.indexOf(levelArrRightHullKey) == -1) {
+                    Node.children.push(new getNode(levelArrRightHullKey, enemyLv))
                 }
             }
-
-
-
-
             Node.children.forEach(child => {
                 child.parent = Node
             })

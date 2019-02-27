@@ -149,7 +149,7 @@ function shipCombat(shipInfo, enemyLevel) {
             }
             if (rightShipHP < 0 && AIShipHP > 0) {
                 // let winner = ["AI", shipInfo, leftShipHit, midShipHit, rightShipHit]
-                let winner = ["AI", shipInfo]
+                let winner = ["AI", shipInfo, rightShipHit]
                 return winner;
             } else if (rightShipHP > 0 && AIShipHP < 0) {
                 // let winner = ["Player", shipInfo, leftShipHit, midShipHit, rightShipHit]
@@ -220,7 +220,9 @@ function shipCombat(shipInfo, enemyLevel) {
             TimeResult.push(result);
         }
     }
+
     if (winner == undefined) return ["Null"]
+
     else return winner;
 
 }
