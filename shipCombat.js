@@ -61,6 +61,7 @@ function shipCombat(shipInfo, enemyLevel) {
         var midShipHit = [0, 0, 0];
         var rightShipHit = [0, 0, 0];
         for (let i = 0; i < TimeResult.length; i++) {
+            // console.log(midShipHP + " " + leftShipHP + " " + rightShipHP + " " + AIShipHP)
             var rightshipHPbefore = rightShipHP;
             if (TimeResult[i][0] === 1) {
                 AIShipArmor -= midShipDamage; // First Hit
@@ -155,6 +156,10 @@ function shipCombat(shipInfo, enemyLevel) {
                 // let winner = ["Player", shipInfo, leftShipHit, midShipHit, rightShipHit]
                 let winner = ["Player", shipInfo, rightShipHit]
                 return winner;
+            } else if (rightShipHP < 0 && AIShipHP < 0) {
+                // let winner = ["AI", shipInfo, leftShipHit, midShipHit, rightShipHit]
+                let winner = ["AI", shipInfo, rightShipHit]
+                return winner;
             }
         }
     }
@@ -214,7 +219,6 @@ function shipCombat(shipInfo, enemyLevel) {
                 TimeResult.push(result)
                 NextAttackTime(rightShipTime, rightAttackTimer, AIShipTime, AIAttackTimer, Selected, Index)
             }
-
         } else {
             result.push(null, null, null, null, null, null, Index)
             TimeResult.push(result);
@@ -227,7 +231,71 @@ function shipCombat(shipInfo, enemyLevel) {
 
 }
 
+// var levelArray = {
+//     "bonus": [
+//         1.165,
+//         6,
+//         0,
+//         4.944,
+//         1.1275,
+//         0.46,
+//         0.2,
+//         0.2,
+//         88,
+//         76
+//     ],
+//     "current_resources": [
+//         6009,
+//         243402
+//     ],
+//     "total_resources": [
+//         390,
+//         390,
+//         1388612,
+//         2297830,
+//         922625,
+//         21605
+//     ],
+//     "leftship": [
+//         0,
+//         0,
+//         64,
+//         0
+//     ],
+//     "midship": [
+//         30,
+//         0,
+//         64,
+//         0
+//     ],
+//     "rightship": [
+//         95,
+//         0,
+//         86,
+//         99
+//     ],
+//     "Currleftship": [
+//         0,
+//         0,
+//         60,
+//         0
+//     ],
+//     "Currmidship": [
+//         30,
+//         0,
+//         60,
+//         0
+//     ],
+//     "Currrightship": [
+//         95,
+//         0,
+//         75,
+//         90
+//     ]
+// }
 
+// var result = shipCombat(levelArray, 436)
+// console.log(result)
 
 
 

@@ -16,11 +16,20 @@ getChildren(start, result);
 queue.push(start);
 
 
+
+//todo : keycheck
+// 1. do not include current enemy lv in key
+// 2. keys -> Object rather than array
+// 3. if duplicated, check the key has higher nenmy lv, if so, dont check current 
+
+
 // const { performance } = require('perf_hooks');
 while (queue.length > 0) {
     // var t0 = performance.now();
     let current = queue.shift();
-    console.log(result.highest + " " + current.enemyLv + " " + queue.length + " " + keys.length + " " + current.key + " " + current.check.costChecked + " " + current.check.combatCheck)
+    var rightShipHit = current.rightShipHit;
+    rightShipHit = rightShipHit.join("")
+    console.log(result.highest + " " + current.enemyLv + " " + queue.length + " " + keys.length + " " + current.key + " " + current.check.costChecked + " " + current.check.combatCheck + " " + rightShipHit)
     // console.log(current)
     // console.log(queue.length + " " + current.enemyLv + " " + current.check.costChecked + " " + current.check.combatCheck)
     if (current.check.costChecked == true) {
@@ -64,16 +73,27 @@ while (queue.length > 0) {
         var HullDiffB = Math.abs(keyArrB[1] - keyArrB[2])
         var WeaponA = keyArrA[3]
         var WeaponB = keyArrA[3]
-
+        var rightShipHitA = a.rightShipHit;
+        rightShipHitA = parseInt(rightShipHitA.join(""))
+        var rightShipHitB = b.rightShipHit;
+        rightShipHitB = parseInt(rightShipHitB.join(""))
         // Compare keys
 
-        // true -> false
-        if (checkA < checkB) return -1;
-        if (checkB > checkA) return 1;
+
 
         //enemy lv
         if (levelA < levelB) return 1;
         if (levelA > levelB) return -1;
+
+
+        //rightshipAttack (012 first) 
+        if (rightShipHitA < rightShipHitB) return 1;
+        if (rightShipHitA > rightShipHitB) return -1;
+
+
+        // true -> false
+        if (checkA < checkB) return -1;
+        if (checkB > checkA) return 1;
 
         //right wing lv
         if (wingA < wingB) return 1;
@@ -106,11 +126,14 @@ while (end.parent) {
 
 
 function getChildren(Node, result) {
+    // console.log(Node.check)
     // console.log(Node.parent)
     var key = Node.key;
     var enemyLv = Node.enemyLv;
+    // console.log(Node)
     var rightShipHit = Node.rightShipHit;
     rightShipHit = rightShipHit.join("")
+    var keyArr = key.split(/\//g);
     // console.log(rightShipHit)
     // console.log(key)
 
@@ -120,6 +143,7 @@ function getChildren(Node, result) {
         if (Node.check.combatCheck == false) {
             //todo : if rightShipHit is not 0,1,2 -> focus on left,mid hull and right hull,wing
             // or focus on mid weapon and right weapon
+            // console.log(rightShipHit)
             if (rightShipHit == "012") {
                 //4. rightweapon
                 let levelArrRightWeaponKey = upgradeOnce(key, 3)
@@ -134,29 +158,40 @@ function getChildren(Node, result) {
                         Node.children.push(new getNode(levelArrMidWeaponKey, enemyLv))
                     }
                 }
-            } else {
+                let levelArrRightHullKey = upgradeOnce(key, 4)
+                if (keys.indexOf(levelArrRightHullKey) == -1) {
+                    Node.children.push(new getNode(levelArrRightHullKey, enemyLv))
+                }
+            } else if (rightShipHit == "011") {
                 //6. rightwing
                 let levelArrRightWingKey = upgradeOnce(key, 5)
                 if (keys.indexOf(levelArrRightWingKey) == -1) {
                     Node.children.push(new getNode(levelArrRightWingKey, enemyLv))
-
                 }
+                // righthull : mid or left + 10?
+                var midHull = parseInt(keyArr[1])
+                var leftHull = parseInt(keyArr[2]);
+                var rightHull = parseInt(keyArr[4]);
+                // if (rightHull > (midHull + leftHull) / 2 + 30) {
                 //3. leftHull
                 let levelArrLeftHullKey = upgradeOnce(key, 2)
                 if (keys.indexOf(levelArrLeftHullKey) == -1) {
                     Node.children.push(new getNode(levelArrLeftHullKey, enemyLv))
                 }
-
                 // 1. midHull 
                 let levelArrMidHullKey = upgradeOnce(key, 1)
                 if (keys.indexOf(levelArrMidHullKey) == -1) {
                     Node.children.push(new getNode(levelArrMidHullKey, enemyLv))
                 }
+                // } else {
                 //5. rightHull
                 let levelArrRightHullKey = upgradeOnce(key, 4)
                 if (keys.indexOf(levelArrRightHullKey) == -1) {
                     Node.children.push(new getNode(levelArrRightHullKey, enemyLv))
                 }
+                // }
+            } else {
+
             }
             Node.children.forEach(child => {
                 child.parent = Node
@@ -168,7 +203,6 @@ function getChildren(Node, result) {
                 result.highest = Node.enemyLv
                 console.log(result.highest);
             }
-
             let nextNode = new getNode(key, enemyLv + 1);
             nextNode.parent = Node;
             Node.children.push(nextNode)

@@ -44,7 +44,6 @@ function getNode(key, enemyLevel) {
     key = keyArr.join("/")
 
     let combination = getCombination(levelArr, enemyLv)
-    // console.log(combination[3])
     // console.log(combination)
     if (!combination[3]) {
         this.check = combination[1];
@@ -67,44 +66,59 @@ function getNode(key, enemyLevel) {
         var thisArray = JSON.parse(JSON.stringify(levelArr))
         var costChecked = costCheck(thisArray, enemyLv);
         var trophyCombination = getTrophyPoint(thisArray, enemyLv)
-        var combination = [];
+        var combination = shipCombat(thisArray, enemyLv);
         var temp = {
             costChecked: costChecked,
-            combatCheck: false
+            combatCheck: false,
+            trophy: []
         }
         for (let i = 0; i < trophyCombination.length; i++) {
-            thisArray["bonus"][8] = trophyCombination[i][0];
-            thisArray["bonus"][9] = trophyCombination[i][1];
-            var combat1 = shipCombat(thisArray, enemyLv)[0];
-            if (combat1[0] == "Null") {
+            levelArr["bonus"][8] = trophyCombination[i][0];
+            levelArr["bonus"][9] = trophyCombination[i][1];
+            var combatone = shipCombat(levelArr, enemyLv);
+            var combat1 = combatone[0]
+            if (combat1 == "Null") {
                 return temp;
             } else {
-                if (combat1 == "Player") {
+                thisArray["bonus"][9] = trophyCombination[i][0];
+                thisArray["bonus"][8] = trophyCombination[i][1];
+                var combattwo = shipCombat(thisArray, enemyLv);
+                if (combattwo[0] == "Null") {
+                    return temp;
+                }
+                var combat2 = combattwo[0]
+                if (combat2 == "Player") {
                     temp.combatCheck = true;
+                    temp.trophy.push(trophyCombination[i][0], trophyCombination[i][1])
                     combination = shipCombat(thisArray, enemyLv);
                     combination.push(temp);
                     return combination;
-                } else {
-                    thisArray["bonus"][9] = trophyCombination[i][0];
-                    thisArray["bonus"][8] = trophyCombination[i][1];
-                    var combat2 = shipCombat(thisArray, enemyLv)[0];
-                    if (combat2 == "Player") {
-                        temp.combatCheck = true;
-                        combination = shipCombat(thisArray, enemyLv);
-                        combination.push(temp);
-                        return combination;
-                    }
                 }
             }
-
+            var rightShipHitOne = combatone[2].join("");
+            var rightShipHitTwo = combattwo[2].join("");
+            // console.log(rightShipHitOne + " " + rightShipHitTwo)
+            if (rightShipHitOne == "012" || rightShipHitTwo == "012") {
+                combination[2] = [0, 1, 2]
+            }
         }
-        combination = shipCombat(thisArray, enemyLv)
 
-        combination.push(temp);
+        if (combination[0] == "AI") {
+            temp.trophy.push(thisArray["bonus"][8], thisArray["bonus"][9])
+            combination.push(temp);
+        }
         // console.log(combination)
         return combination;
     }
 }
+
+
+
+
+
+// var Node = getNode("30/64/64/95/86/99/436", 436)
+// console.log(Node)
+
 
 
 module.exports = getNode
