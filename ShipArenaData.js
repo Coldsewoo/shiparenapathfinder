@@ -137,7 +137,7 @@ function getTrophyPoint(levelArr, enemyLv) {
         if (levelMax > 100) levelMax = 100;
         //combination : levelmax +- 5?
         // e.g levelmax = 50 -> 54 53 52 51 50
-        var maxIteration = Math.max(Math.min(101 - levelMax, 7), 0);
+        var maxIteration = Math.max(Math.min(101 - levelMax, 15), 0);
         var trophyCombination = [];
         return getCombination(trophyCombination, trophyPointAvailable, levelMax, maxIteration);
 

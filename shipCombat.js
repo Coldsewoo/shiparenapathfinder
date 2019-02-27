@@ -153,7 +153,7 @@ function shipCombat(shipInfo, enemyLevel) {
                 return winner;
             } else if (rightShipHP > 0 && AIShipHP < 0) {
                 // let winner = ["Player", shipInfo, leftShipHit, midShipHit, rightShipHit]
-                let winner = ["Player", shipInfo]
+                let winner = ["Player", shipInfo, rightShipHit]
                 return winner;
             }
         }
