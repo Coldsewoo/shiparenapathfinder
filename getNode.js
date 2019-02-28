@@ -40,7 +40,7 @@ function getNode(key, enemyLevel) {
     levelArr["rightship"][0] = Number(keyArr[3]);
     levelArr["rightship"][2] = Number(keyArr[4]);
     levelArr["rightship"][3] = Number(keyArr[5]);
-    keyArr[6] = enemyLv;
+    // keyArr[6] = enemyLv;
     key = keyArr.join("/")
 
     let combination = getCombination(levelArr, enemyLv)

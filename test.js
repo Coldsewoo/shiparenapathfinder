@@ -21,14 +21,32 @@ Number.prototype.ROUND = function (i) {
     return Math.round(num) / demical;
 }
 
-a = [false, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, false, true, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false];
+// a = [false, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, false, true, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false];
 
 
-a.sort(function (x, y) {
-    // true values first
-    return (x === y) ? 0 : x ? -1 : 1;
-    // false values first
-    // return (x === y)? 0 : x? 1 : -1;
-});
+// a.sort(function (x, y) {
+//     // true values first
+//     return (x === y) ? 0 : x ? -1 : 1;
+//     // false values first
+//     // return (x === y)? 0 : x? 1 : -1;
+// });
 
-console.log(a);
+// console.log(a);
+
+
+String.prototype.checkIfValid = function (object, currLv) {
+    // console.log(this.valueOf())
+    return (!object[this.valueOf()] || (object[this.valueOf()].enemyLv && object[this.valueOf()].enemyLv != currLv))
+}
+
+var testString = "30/60/60/95/75/90";
+var keys = {
+    "30/60/60/95/75/90": {
+        enemyLv: 395
+    }
+}
+
+var anotherKey = "31/60/60/95/75/90";
+
+
+console.log(testString.checkIfValid(anotherKey, 395))
